@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
+const Verifier = require("email-verifier");
 
 mongoose.connect(
   "mongodb+srv://admin:admin@cluster0.gqnxp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
@@ -15,9 +16,9 @@ const nodemailer = require("nodemailer");
 
 const app = express();
 
-var currentUser = "singhprakhar0610@gmail.com";
-var currentPassword = "Mkt204mkt.";
-var currentUserName = "Prakhar Singh";
+var currentUser = "";
+var currentPassword = "";
+var currentUserName = "";
 
 app.set("view engine", "ejs");
 
@@ -27,6 +28,9 @@ app.use(express.static("public"));
 
 var port = process.env.PORT || 3000;
 
+let today = new Date();
+today = today.toDateString();
+
 app.get("/composeMail", function (req, res) {
   res.render("composeMail");
 });
@@ -34,16 +38,8 @@ app.get("/composeMail", function (req, res) {
 app.post("/composeMail", function (req, res) {
   var sender = currentUser;
   // var senderPassword = currentPassword;
-  const newMail = new Email({
-    to: req.body.to,
-    body: req.body.emailBody,
-    subject: req.body.subject,
-    cc: req.body.cc,
-    bcc: req.body.bcc,
-    from: sender,
-  });
 
-  newMail.save();
+  console.log(currentUser);
   async function main() {
     let transporter = nodemailer.createTransport({
       host: "smtp.googlemail.com", // Gmail Host
@@ -64,17 +60,76 @@ app.post("/composeMail", function (req, res) {
       subject: `${req.body.subject}`, // Subject line
       text: `${req.body.emailBody}`, // plain text body
     });
+    const newMail = new Email({
+      to: req.body.to,
+      body: req.body.emailBody,
+      subject: req.body.subject,
+      cc: req.body.cc,
+      bcc: req.body.bcc,
+      from: sender,
+      date: today,
+    });
+
+    newMail.save();
 
     console.log("Message sent: %s", info.messageId);
   }
 
-  main().catch(res.send(error));
-
-  res.render("home");
+  main().catch(console.error);
+  Email.find({ from: currentUser }, function (err, foundEmails) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("landingPage", {
+        emails: foundEmails,
+        userName: currentUserName,
+      });
+    }
+  });
 });
 
 app.get("/", function (req, res) {
   res.render("home");
+});
+
+app.post("/login", function (req, res) {
+  // let verifier = new Verifier("prsingh061000@gmail.com", "barneystinson");
+  // verifier.verify(req.body.username, (err, data) => {
+  //   if (err) throw err;
+  //   console.log(data);
+  // });
+  currentPassword = req.body.password;
+  currentUser = req.body.username;
+  currentUserName = req.body.name;
+
+  Email.find({ from: currentUser }, function (err, foundEmails) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("landingPage", {
+        emails: foundEmails,
+        userName: currentUserName,
+      });
+    }
+  });
+});
+
+app.get("/email/:_id", function (req, res) {
+  var requestedId = req.params._id;
+  Email.findOne({ _id: requestedId }, function (err, foundEmail) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("emailPage", {
+        to: foundEmail.to,
+        subject: foundEmail.subject,
+        body: foundEmail.body,
+        date: foundEmail.date,
+        cc: foundEmail.cc,
+        bcc: foundEmail.bcc,
+      });
+    }
+  });
 });
 
 app.listen(port, function () {

@@ -7,6 +7,7 @@ const emailsSchema = {
   bcc: String,
   subject: String,
   body: String,
+  date: String,
 };
 
 const Email = mongoose.model("Email", emailsSchema);

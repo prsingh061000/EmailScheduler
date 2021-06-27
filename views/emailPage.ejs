@@ -1,0 +1,78 @@
+<%- include("partials/header"); -%>
+
+<nav class="navbar sticky-top navbar-expand-xl navbar-dark bg-dark">
+    <a class="navbar-brand float-right" href="/"><b>Email</b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" style="text-align: center;" href="/composeMail">Compose</a>
+        </li>
+      </ul> 
+          <form class="d-flex" style="text-align: center;">
+           
+            <a class="btn btn-outline-danger" style="text-align: center;" href="/">Logout</a>
+          </form>
+        
+       
+      
+      
+    </div>
+  </nav>
+
+<div class="container">
+    <div class="row">
+    <div class="col-xl-2 col-lg-12">
+
+    </div>
+    <div class="col-xl-8 col-lg-12">
+        <table class="table table-striped">
+            <thead>
+                <th>To : </th>
+                <td> <%= to %></td>
+            </thead>
+            <thead>
+                <th>Cc : </th>
+                <td> <%= cc %></td>
+            </thead>
+            <thead>
+                <th>Bcc : </th>
+                <td> <%= bcc %></td>
+            </thead>
+            <thead>
+                <th>Subject : </th>
+                <td> <%= subject %></td>
+            </thead>
+            <thead>
+                <th>Date : </th>
+                <td> <%= date %></td>
+            </thead>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+        <p class="emailBody">
+            <%= body %>
+        </p>
+        
+        
+        
+        
+        
+       
+    </div>
+    <div class="col-xl-2 col-lg-12">
+
+    </div> 
+    </div>
+</div>
+
+<%- include("partials/footer"); -%>

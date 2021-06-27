@@ -1,0 +1,66 @@
+<%- include("partials/header"); -%>
+
+<nav class="navbar sticky-top navbar-expand-xl navbar-dark bg-dark">
+    <a class="navbar-brand float-right" href="/"><b>Email</b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" style="text-align: center;" href="/composeMail">Compose</a>
+        </li>
+      </ul> 
+          <form class="d-flex" style="text-align: center;">
+           
+            <a class="btn btn-outline-danger" style="text-align: center;" href="/">Logout</a>
+          </form>
+        
+       
+      
+      
+    </div>
+  </nav>
+
+<div class="container">
+    
+    <h3 align="center">Sent Mail</h3>
+    <% if(emails.length>0) { %>
+    <div class="row">
+    <div class="col s12 m6 l6 offset-m2 offset-l2">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>To</th>
+                <th>Subject</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+                <% for(var i = emails.length-1;i>=0;i--) { %>
+                
+                <tr>
+               <td> <a class="" href="/email/<%=emails[i]._id%>" ><%=emails[i].to %></a></td>
+               <td>
+                <p class=""><%=emails[i].subject %></p>
+               </td>
+               <td>
+                <p class=""><%=emails[i].date %></p>
+               </td> 
+            </tr>
+            <% } %>
+            
+             </tbody>
+        </table>
+    </div>
+    </div>
+
+    <% } else { %>
+    <p>No Emails Found</p> <% } %>
+    
+
+
+
+</div>
+<%- include("partials/footer"); -%>
