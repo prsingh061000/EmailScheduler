@@ -71,11 +71,29 @@ app.post("/composeMail", function (req, res) {
     });
 
     newMail.save();
-
+    res.redirect("/landingPage");
     console.log("Message sent: %s", info.messageId);
   }
 
   main().catch(console.error);
+
+  // Email.find({ from: currentUser }, function (err, foundEmails) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     res.render("landingPage", {
+  //       emails: foundEmails,
+  //       userName: currentUserName,
+  //     });
+  //   }
+  // });
+});
+
+app.get("/", function (req, res) {
+  res.render("home");
+});
+
+app.get("/landingPage", function (req, res) {
   Email.find({ from: currentUser }, function (err, foundEmails) {
     if (err) {
       console.log(err);
@@ -86,10 +104,6 @@ app.post("/composeMail", function (req, res) {
       });
     }
   });
-});
-
-app.get("/", function (req, res) {
-  res.render("home");
 });
 
 app.post("/login", function (req, res) {
